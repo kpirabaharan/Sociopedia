@@ -1,4 +1,5 @@
 import { format } from 'path';
+
 import User from '../models/User.js';
 
 /* READ */
