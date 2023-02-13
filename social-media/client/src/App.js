@@ -1,35 +1,36 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
+import { themeSettings } from './theme';
 import HomePage from 'scenes/homePage';
 import LoginPage from 'scenes/loginPage';
 import ProfilePage from 'scenes/profilePage';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { createTheme } from '@mui/system';
-import { themeSettings } from 'theme';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    children: [
+      { index: true, element: <LoginPage /> },
+      { path: 'home', element: <HomePage /> },
+      { path: 'profile:userId', element: <ProfilePage /> },
+    ],
+  },
+]);
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      children: [
-        { index: true, element: <LoginPage /> },
-        { path: 'home', element: <HomePage /> },
-        { path: 'profile:userId', element: <ProfilePage /> },
-      ],
-    },
-  ]);
-
   return (
-    <RouterProvider router={router}>
+    <div className='app'>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <RouterProvider router={router} />
       </ThemeProvider>
-    </RouterProvider>
+    </div>
   );
 }
 
