@@ -31,7 +31,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  const isNonMobileScreens = useMediaQuery('(min-width: 1000px)');
+  const isNonMobileScreens = useMediaQuery('(min-width: 1075px)');
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -41,6 +41,11 @@ const NavBar = () => {
   const alt = theme.palette.background.alt;
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : 'Keeshigan P';
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    navigate('/');
+  };
 
   return (
     <FlexBetween padding='1rem 6%' backgroundColor={alt}>
@@ -92,7 +97,7 @@ const NavBar = () => {
               value={fullName}
               sx={{
                 backgroundColor: neutralLight,
-                width: '150px',
+                width: '200px',
                 borderRadius: '0.25rem',
                 p: '0.25rem 1rem',
                 '& .MuiSvgIcon-root': {
@@ -167,7 +172,7 @@ const NavBar = () => {
                 value={fullName}
                 sx={{
                   backgroundColor: neutralLight,
-                  width: '150px',
+                  width: '200px',
                   borderRadius: '0.25rem',
                   p: '0.25rem 1rem',
                   '& .MuiSvgIcon-root': {
@@ -183,9 +188,7 @@ const NavBar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  Log Out
-                </MenuItem>
+                <MenuItem onClick={() => handleLogout()}>Log Out</MenuItem>
               </Select>
             </FormControl>
           </FlexBetween>
