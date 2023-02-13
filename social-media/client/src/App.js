@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
@@ -9,20 +13,30 @@ import HomePage from 'scenes/homePage';
 import LoginPage from 'scenes/loginPage';
 import ProfilePage from 'scenes/profilePage';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    children: [
-      { index: true, element: <LoginPage /> },
-      { path: 'home', element: <HomePage /> },
-      { path: 'profile:userId', element: <ProfilePage /> },
-    ],
-  },
-]);
-
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const isAuth = Boolean(useSelector((state) => state.token));
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      children: [
+        {
+          index: true,
+          element: !isAuth ? <LoginPage /> : <Navigate to={'/home'} />,
+        },
+        {
+          path: 'home',
+          element: isAuth ? <HomePage /> : <Navigate to={'/'} />,
+        },
+        {
+          path: 'profile:userId',
+          element: isAuth ? <ProfilePage /> : <Navigate to={'/'} />,
+        },
+      ],
+    },
+  ]);
 
   return (
     <div className='app'>
