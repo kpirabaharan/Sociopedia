@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 
 import NavBar from 'scenes/navBar';
 import UserWidget from 'scenes/widgets/UserWidget';
+import MyPostWidget from 'scenes/widgets/MyPostWidget';
 
 const HomePage = () => {
   // const user = useSelector((state) => state.user);
@@ -29,7 +30,9 @@ const HomePage = () => {
         <Box
           flexBasis={isNonMobileScreens ? '42%' : undefined}
           mt={isNonMobileScreens ? undefined : '2rem'}
-        ></Box>
+        >
+          <MyPostWidget picturePath={picturePath} />
+        </Box>
         {isNonMobileScreens && <Box flexBasis='26%'></Box>}
       </Box>
     </Box>
