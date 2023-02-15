@@ -37,10 +37,10 @@ const PostWidget = ({
   const primary = palette.primary.main;
 
   const patchLike = async () => {
-    const response = await fetch(`http://localhost:8080/${postId}/like`, {
+    const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
       method: 'PATCH',
       headers: {
-        Authorizaton: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId: loggedInUserId }),
@@ -65,7 +65,7 @@ const PostWidget = ({
         <img
           width='100%'
           height='auto'
-          alt='Post'
+          alt='POST'
           style={{ borderRadius: '0.75rem', marginTop: '0.75rem' }}
           src={`http://localhost:8080/assets/${picturePath}`}
         />
