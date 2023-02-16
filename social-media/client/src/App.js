@@ -31,7 +31,7 @@ function App() {
           element: isAuth ? <HomePage /> : <Navigate to={'/'} />,
         },
         {
-          path: 'profile:userId',
+          path: 'profile/:userId',
           element: isAuth ? <ProfilePage /> : <Navigate to={'/'} />,
         },
       ],

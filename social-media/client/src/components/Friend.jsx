@@ -1,26 +1,35 @@
+import { PersonAddOutlined, PersonRemoveOutlined } from '@mui/icons-material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { PersonAddOutlined, PersonRemoveOutlined } from '@mui/icons-material';
-
 import { setFriends } from 'state';
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
-  const { palette } = useTheme();
+const Friend = ({
+  friendId,
+  name,
+  subtitle,
+  userPicturePath,
+  isProfile,
+  isUserProfile = true,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
+  const user = useSelector((state) => state.user);
 
+  const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
   const isFriend = friends.find((friend) => friend._id === friendId);
+  //   console.log(friendId, friends);
+  console.log('user', user);
 
   const patchFriend = async () => {
     const response = await fetch(
@@ -34,9 +43,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
       },
     );
     const data = await response.json();
-
     dispatch(setFriends({ friends: data }));
   };
+
   return (
     <FlexBetween>
       <FlexBetween gap='1rem'>
@@ -44,7 +53,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         <Box
           onClick={() => {
             navigate(`/profile/${friendId}`);
-            // TODO: Check if removing this still works
             navigate(0);
           }}
         >
@@ -53,7 +61,10 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             variant='h5'
             fontWeight='500'
             sx={{
-              '&:hover': { color: palette.primary.light, cursor: 'pointer' },
+              '&:hover': {
+                color: palette.primary.light,
+                cursor: 'pointer',
+              },
             }}
           >
             {name}
@@ -63,16 +74,18 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           </Typography>
         </Box>
       </FlexBetween>
-      <IconButton
-        onClick={() => patchFriend()}
-        sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
-      >
-        {isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} />
-        )}
-      </IconButton>
+      {!isProfile && isUserProfile && (
+        <IconButton
+          onClick={() => patchFriend()}
+          sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
+        >
+          {isFriend ? (
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          ) : (
+            <PersonAddOutlined sx={{ color: primaryDark }} />
+          )}
+        </IconButton>
+      )}
     </FlexBetween>
   );
 };

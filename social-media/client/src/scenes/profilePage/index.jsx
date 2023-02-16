@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { Box, useMediaQuery } from '@mui/material';
 
 import FriendListWidget from 'scenes/widgets/FriendListWidget';
-import MyPostWidget from 'scenes/widgets/MyPostWidget';
 import PostsWidget from 'scenes/widgets/PostsWidget';
 import UserWidget from 'scenes/widgets/UserWidget';
 import NavBar from 'scenes/navBar';

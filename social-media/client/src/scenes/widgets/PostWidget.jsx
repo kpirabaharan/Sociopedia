@@ -14,7 +14,6 @@ import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
 
 const PostWidget = ({
-  key,
   postId,
   postUserId,
   name,
@@ -24,6 +23,7 @@ const PostWidget = ({
   userPicturePath,
   likes,
   comments,
+  isUserProfile,
 }) => {
   const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -51,12 +51,13 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetWrapper m='2rem 0'>
+    <WidgetWrapper m='0rem 0'>
       <Friend
         friendId={postUserId}
         name={name}
         subtitle={location}
         userPicturePath={userPicturePath}
+        isUserProfile={isUserProfile}
       />
       <Typography color={main} sx={{ mt: '1rem' }}>
         {description}
