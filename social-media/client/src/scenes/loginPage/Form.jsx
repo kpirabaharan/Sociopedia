@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
 import Dropzone from 'react-dropzone';
 import { Formik } from 'formik';
 import { object, string } from 'yup';
@@ -48,13 +48,12 @@ const initialValuesLogin = {
 };
 
 const Form = () => {
-  const [pageType, setPageType] = useState('login');
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery('(min-width:600px)');
-  const isLogin = pageType === 'login';
-  const isRegister = pageType === 'register';
+  const [searchParams] = useSearchParams();
+  const isLogin = searchParams.get('mode') === 'login';
 
   const mainColor = palette.primary.main;
   const altColor = palette.background.alt;
@@ -80,7 +79,7 @@ const Form = () => {
     console.log(savedUser);
 
     if (savedUser) {
-      setPageType('login');
+      navigate('/?mode=login');
     }
   };
 
@@ -104,7 +103,7 @@ const Form = () => {
     if (isLogin) {
       await login(values, onSubmitProps);
     }
-    if (isRegister) {
+    if (!isLogin) {
       await register(values, onSubmitProps);
     }
   };
@@ -135,7 +134,7 @@ const Form = () => {
               '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
             }}
           >
-            {isRegister && (
+            {!isLogin && (
               <>
                 <TextField
                   label='First Name'
@@ -255,7 +254,7 @@ const Form = () => {
             </Button>
             <Typography
               onClick={() => {
-                setPageType(isLogin ? 'register' : 'login');
+                navigate(`?mode=${isLogin ? 'signup' : 'login'}`);
                 resetForm();
               }}
               sx={{

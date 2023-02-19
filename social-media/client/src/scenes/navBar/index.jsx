@@ -44,7 +44,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(setLogout());
-    navigate('/');
+    navigate('/?mode=login');
   };
 
   return (
