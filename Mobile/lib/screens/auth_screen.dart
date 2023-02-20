@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/form.dart';
+import '../widgets/auth_form.dart';
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth-screen';
 
   const AuthScreen({super.key});
 
+  void switchAuth(BuildContext ctx, bool isRegister) {
+    Navigator.of(ctx).pushReplacementNamed(AuthScreen.routeName, arguments: !isRegister);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
+    final isRegister = ModalRoute.of(context)!.settings.arguments as bool;
+    final authText = isRegister ? 'Register' : 'Login';
+    final notAuthText = isRegister ? 'Login' : 'Register';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text(authText),
       ),
       body: Stack(
         children: [
@@ -30,16 +38,72 @@ class AuthScreen extends StatelessWidget {
               ),
             ),
           ),
-          Column(children: [
-            SizedBox(
-              height: deviceHeight.height * 0.1,
-            ),
-            Center(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
                 child: Container(
-              width: deviceHeight.width * 0.9,
-              child: const AuthForm(),
-            )),
-          ]),
+                  width: deviceSize.width * 0.90,
+                  child: AuthForm(isRegister),
+                ),
+              ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              ElevatedButton(
+                onPressed: () => {},
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  minimumSize: Size(deviceSize.width * 0.90, 40),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ),
+                child: Text(authText),
+              ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Divider(
+                      thickness: 2,
+                      indent: deviceSize.width * 0.05,
+                      endIndent: deviceSize.width * 0.05,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    "OR",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 2,
+                      indent: deviceSize.width * 0.05,
+                      endIndent: deviceSize.width * 0.05,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              ElevatedButton(
+                onPressed: () => switchAuth(context, isRegister),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  minimumSize: Size(deviceSize.width * 0.90, 40),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ),
+                child: Text(notAuthText),
+              ),
+              if (!isRegister)
+                SizedBox(
+                  height: 200,
+                )
+            ],
+          ),
         ],
       ),
     );

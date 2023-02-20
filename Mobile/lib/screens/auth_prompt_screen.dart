@@ -5,11 +5,11 @@ class AuthPromptScreen extends StatelessWidget {
   const AuthPromptScreen({super.key});
 
   void login(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(AuthScreen.routeName);
+    Navigator.of(ctx).pushNamed(AuthScreen.routeName, arguments: false);
   }
 
   void register(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(AuthScreen.routeName);
+    Navigator.of(ctx).pushNamed(AuthScreen.routeName, arguments: true);
   }
 
   @override
@@ -56,7 +56,7 @@ class AuthPromptScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 300,
+                    height: 250,
                   ),
                   Text(
                     'Welcome to Sociopedia\nThe Social Media for Sociopaths!',
