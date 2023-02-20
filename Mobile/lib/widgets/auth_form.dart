@@ -6,6 +6,7 @@ import './image_input.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isRegister;
+  
 
   const AuthForm(this.isRegister, {super.key});
 
@@ -18,10 +19,7 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final GlobalKey<FormState> _formKey = GlobalKey();
-    final Map<String, String> _authData = {
-      'email': '',
-      'password': '',
-    };
+
     File? _pickedImage;
     void _selectImage(File pickedImage) {
       _pickedImage = pickedImage;
@@ -47,8 +45,9 @@ class _AuthFormState extends State<AuthForm> {
                       Expanded(
                         child: Container(
                           child: TextFormField(
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'First Name',
+                              labelStyle: Theme.of(context).textTheme.labelMedium,
                             ),
                             keyboardType: TextInputType.name,
                             validator: (value) {
@@ -66,9 +65,11 @@ class _AuthFormState extends State<AuthForm> {
                       Expanded(
                         child: Container(
                           child: TextFormField(
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Last Name',
+                              labelStyle: Theme.of(context).textTheme.labelMedium,
                               suffixIcon: Icon(Icons.person),
+                              suffixIconColor: Theme.of(context).iconTheme.color,
                             ),
                             keyboardType: TextInputType.name,
                             validator: (value) {
@@ -87,8 +88,14 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                 if (widget.isRegister)
                   TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Location', suffixIcon: Icon(Icons.location_on)),
+                    decoration: InputDecoration(
+                      labelText: 'Location',
+                      labelStyle: Theme.of(context).textTheme.labelMedium,
+                      suffixIcon: Icon(
+                        Icons.location_on,
+                      ),
+                      suffixIconColor: Theme.of(context).iconTheme.color,
+                    ),
                     keyboardType: TextInputType.streetAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -102,8 +109,12 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                 if (widget.isRegister)
                   TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Occupation', suffixIcon: Icon(Icons.work)),
+                    decoration: InputDecoration(
+                      labelText: 'Occupation',
+                      labelStyle: Theme.of(context).textTheme.labelMedium,
+                      suffixIcon: Icon(Icons.work),
+                      suffixIconColor: Theme.of(context).iconTheme.color,
+                    ),
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -118,9 +129,11 @@ class _AuthFormState extends State<AuthForm> {
                 if (widget.isRegister) Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 if (widget.isRegister) ImageInput(_selectImage),
                 TextFormField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'E-Mail',
+                    labelStyle: Theme.of(context).textTheme.labelMedium,
                     suffixIcon: Icon(Icons.email),
+                    suffixIconColor: Theme.of(context).iconTheme.color,
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -134,9 +147,11 @@ class _AuthFormState extends State<AuthForm> {
                   },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Password',
+                    labelStyle: Theme.of(context).textTheme.labelMedium,
                     suffixIcon: Icon(Icons.lock),
+                    suffixIconColor: Theme.of(context).iconTheme.color,
                   ),
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
