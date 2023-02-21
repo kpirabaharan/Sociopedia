@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/feed.dart';
+
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home-screen';
 
@@ -7,6 +9,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sociopedia'),
+        // automaticallyImplyLeading: false,
+      ),
+      body: Feed(),
+    );
   }
 }

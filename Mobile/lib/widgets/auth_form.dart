@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:social_media_frontend/screens/auth_screen.dart';
 
 import './image_input.dart';
 
 class AuthForm extends StatefulWidget {
-  final bool isRegister;
-  
+  final AuthMode _authMode;
 
-  const AuthForm(this.isRegister, {super.key});
+  const AuthForm(this._authMode, {super.key});
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -19,6 +19,10 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final GlobalKey<FormState> _formKey = GlobalKey();
+    final Map<String, String> _authData = {
+      'email': '',
+      'password': '',
+    };
 
     File? _pickedImage;
     void _selectImage(File pickedImage) {
@@ -39,7 +43,7 @@ class _AuthFormState extends State<AuthForm> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                if (widget.isRegister)
+                if (widget._authMode == AuthMode.signup)
                   Row(
                     children: [
                       Expanded(
@@ -86,7 +90,7 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     ],
                   ),
-                if (widget.isRegister)
+                if (widget._authMode == AuthMode.signup)
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Location',
@@ -107,7 +111,7 @@ class _AuthFormState extends State<AuthForm> {
                       _authData['location'] = value!;
                     },
                   ),
-                if (widget.isRegister)
+                if (widget._authMode == AuthMode.signup)
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Occupation',
@@ -126,8 +130,9 @@ class _AuthFormState extends State<AuthForm> {
                       _authData['occupation'] = value!;
                     },
                   ),
-                if (widget.isRegister) Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                if (widget.isRegister) ImageInput(_selectImage),
+                if (widget._authMode == AuthMode.signup)
+                  Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                if (widget._authMode == AuthMode.signup) ImageInput(_selectImage),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'E-Mail',

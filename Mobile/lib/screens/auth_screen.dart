@@ -1,26 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_frontend/widgets/feed.dart';
 
+import '../widgets/image_input.dart';
 import '../widgets/auth_form.dart';
 
-class AuthScreen extends StatelessWidget {
+enum AuthMode { signup, login }
+
+class AuthScreen extends StatefulWidget {
   static const routeName = '/auth-screen';
 
-  const AuthScreen({super.key});
+  const AuthScreen();
 
-  void switchAuth(BuildContext ctx, bool isRegister) {
-    Navigator.of(ctx).pushReplacementNamed(AuthScreen.routeName, arguments: !isRegister);
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  var _isInit = true;
+  AuthMode _authMode = AuthMode.login;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final isRegister = ModalRoute.of(context)!.settings.arguments as bool;
+      _authMode = isRegister ? AuthMode.signup : AuthMode.login;
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void _switchAuth() {
+    if (_authMode == AuthMode.login) {
+      setState(() {
+        _authMode = AuthMode.signup;
+      });
+    } else {
+      setState(() {
+        _authMode = AuthMode.login;
+      });
+    }
+    print(_authMode);
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final isRegister = ModalRoute.of(context)!.settings.arguments as bool;
-    final authText = isRegister ? 'Register' : 'Login';
-    final notAuthText = isRegister ? 'Login' : 'Register';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(authText),
+        title: Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
       ),
       body: Stack(
         children: [
@@ -44,7 +72,7 @@ class AuthScreen extends StatelessWidget {
               Center(
                 child: Container(
                   width: deviceSize.width * 0.90,
-                  child: AuthForm(isRegister),
+                  child: AuthForm(_authMode),
                 ),
               ),
               Padding(padding: EdgeInsets.symmetric(vertical: 5)),
@@ -55,9 +83,9 @@ class AuthScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   minimumSize: Size(deviceSize.width * 0.90, 40),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  // backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
-                child: Text(authText),
+                child: Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
               ),
               Padding(padding: EdgeInsets.symmetric(vertical: 5)),
               Row(
@@ -71,7 +99,7 @@ class AuthScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "OR",
+                    "or",
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -88,20 +116,20 @@ class AuthScreen extends StatelessWidget {
               ),
               Padding(padding: EdgeInsets.symmetric(vertical: 5)),
               ElevatedButton(
-                onPressed: () => switchAuth(context, isRegister),
+                onPressed: _switchAuth,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   minimumSize: Size(deviceSize.width * 0.90, 40),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  // backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
-                child: Text(notAuthText),
+                child: Text('${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
               ),
-              if (!isRegister)
-                SizedBox(
-                  height: 200,
-                )
+              // if (!isRegister)
+              //   SizedBox(
+              //     height: 200,
+              //   )
             ],
           ),
         ],

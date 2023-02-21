@@ -66,7 +66,7 @@ class AuthPromptScreen extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 40),
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      // backgroundColor: Theme.of(context).colorScheme.secondary,
                     ),
                     onPressed: () => login(context),
                     child: Text('Login'),

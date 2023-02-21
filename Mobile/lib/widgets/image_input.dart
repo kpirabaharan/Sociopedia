@@ -45,21 +45,29 @@ class _ImageInputState extends State<ImageInput> {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            border: Border.all(width: 1),
+            border: Border.all(
+              width: 1,
+            ),
           ),
           alignment: Alignment.center,
           child: _storedImage != null
               ? Image.file(_storedImage as File, fit: BoxFit.cover, width: double.infinity)
-              : const Text('No Image Taken', textAlign: TextAlign.center),
+              : const Text(
+                  'No Image Taken',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(),
+                ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: TextButton.icon(
             onPressed: _takePicture,
-            icon: const Icon(Icons.camera),
+            icon: const Icon(
+              Icons.camera,
+            ),
             label: Text(
               'Take Picture',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(),
             ),
           ),
         ),
