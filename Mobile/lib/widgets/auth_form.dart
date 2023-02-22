@@ -20,6 +20,16 @@ class _AuthFormState extends State<AuthForm> {
   var _isInit = true;
   AuthMode _authMode = AuthMode.login;
 
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, String> _authData = {
+    'email': '',
+    'password': '',
+    'firstName': '',
+    'lastName': '',
+    'location': '',
+    'occupation': '',
+  };
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -39,17 +49,19 @@ class _AuthFormState extends State<AuthForm> {
         _authMode = AuthMode.login;
       });
     }
-    print(_authMode);
+  }
+
+  void _tryLogin() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+    widget.loginFn(_authData['email']!, _authData['password']!);
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final GlobalKey<FormState> _formKey = GlobalKey();
-    final Map<String, String> _authData = {
-      'email': '',
-      'password': '',
-    };
 
     File? _pickedImage;
     void _selectImage(File pickedImage) {
@@ -204,7 +216,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                     ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: _tryLogin,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
