@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/auth.dart';
 import '../widgets/feed.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,7 +14,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sociopedia'),
-        // automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () => Provider.of<Auth>(context, listen: false).logout(),
+            icon: Icon(Icons.logout),
+          )
+        ],
       ),
       body: Center(child: Text('Home')),
     );

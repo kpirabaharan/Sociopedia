@@ -36,7 +36,7 @@ class User {
 }
 
 class Auth with ChangeNotifier {
-  late User _user;
+  late User? _user;
   String? _token;
 
   String? get token {
@@ -51,7 +51,7 @@ class Auth with ChangeNotifier {
   }
 
   String? get userId {
-    return _user._id;
+    return _user!._id;
   }
 
   Future<void> login(String email, String password) async {
@@ -94,16 +94,16 @@ class Auth with ChangeNotifier {
       final userData = json.encode(
         {
           'token': _token,
-          '_id': _user._id,
-          'firstName': _user.firstName,
-          'lastName': _user.lastName,
-          'friends': _user.friends,
-          'email': _user.email,
-          'picturePath': _user.picturePath,
-          'location': _user.location,
-          'occupation': _user.occupation,
-          'viewedProfile': _user.viewedProfile,
-          'impressions': _user.impressions,
+          '_id': _user!._id,
+          'firstName': _user!.firstName,
+          'lastName': _user!.lastName,
+          'friends': _user!.friends,
+          'email': _user!.email,
+          'picturePath': _user!.picturePath,
+          'location': _user!.location,
+          'occupation': _user!.occupation,
+          'viewedProfile': _user!.viewedProfile,
+          'impressions': _user!.impressions,
         },
       );
       prefs.setString('userData', userData);
@@ -135,5 +135,14 @@ class Auth with ChangeNotifier {
     );
     notifyListeners();
     return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _user = null;
+    
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    notifyListeners();
   }
 }
