@@ -34,6 +34,7 @@ export const register = async (req, res) => {
       impressions: Math.floor(Math.random() * 10000),
     });
     const savedUser = await newUser.save();
+    savedUser.password = undefined;
     res.status(201).json(savedUser);
   } catch (err) {
     console.log(err);
@@ -59,7 +60,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password;
+    user.password = undefined;
     res.status(200).json({ token, user });
   } catch (err) {
     console.log(err);
