@@ -27,7 +27,7 @@ class _FeedState extends State<Feed> {
   @override
   Widget build(BuildContext context) {
     final DUMMY_DATA = [
-      Post(
+      Post('p1',
           name: 'Keeshigan',
           location: 'Ajax',
           description: 'Selfie',

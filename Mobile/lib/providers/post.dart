@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Post {
+  final String _id;
   final String name;
   final String location;
   final String description;
@@ -12,7 +13,8 @@ class Post {
   final int likes;
   final List<String>? comments;
 
-  Post({
+  Post(
+    this._id, {
     required this.name,
     required this.location,
     required this.description,
