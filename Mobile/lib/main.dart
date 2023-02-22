@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './providers/user.dart';
+import './providers/auth.dart';
 import './providers/post.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
@@ -63,9 +63,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => User(),
+          create: (ctx) => Auth(),
         ),
-        ChangeNotifierProxyProvider<User, Posts>(
+        ChangeNotifierProxyProvider<Auth, Posts>(
           create: (ctx) => Posts(null, []),
           update: (ctx, auth, previousPosts) => Posts(
             auth.token ?? '',
