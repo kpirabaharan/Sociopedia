@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 
-//TODO: Add autologin feature making use of shared preference
+//TODO: Add AutoLogout after 1hr
 
 class User {
   final String _id;
@@ -110,5 +110,30 @@ class Auth with ChangeNotifier {
     } catch (err) {
       rethrow;
     }
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+    final extractedUserData =
+        json.decode(prefs.getString('userData') as String) as Map<String, dynamic>;
+
+    _token = extractedUserData['token'] as String;
+    _user = User(
+      extractedUserData['_id'],
+      firstName: extractedUserData['firstName'],
+      lastName: extractedUserData['lastName'],
+      friends: extractedUserData['friends'],
+      email: extractedUserData['email'],
+      picturePath: extractedUserData['picturePath'],
+      location: extractedUserData['location'],
+      occupation: extractedUserData['occupation'],
+      viewedProfile: extractedUserData['viewedProfile'],
+      impressions: extractedUserData['impressions'],
+    );
+    notifyListeners();
+    return true;
   }
 }

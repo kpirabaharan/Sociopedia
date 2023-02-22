@@ -81,7 +81,9 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeMode.dark,
             home: auth.isAuth
                 ? HomeScreen()
-                : FutureBuilder(builder: (context, snapshot) => AuthPromptScreen()),
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (context, snapshot) => AuthPromptScreen()),
             routes: {
               // HomeScreen.routeName: (ctx) => HomeScreen(),
               AuthScreen.routeName: (ctx) => AuthScreen()
