@@ -65,24 +65,28 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
-        ChangeNotifierProxyProvider<Auth, Posts>(
-          create: (ctx) => Posts(null, []),
-          update: (ctx, auth, previousPosts) => Posts(
-            auth.token ?? '',
-            previousPosts == null ? [] : previousPosts.posts,
-          ),
-        ),
+        // ChangeNotifierProxyProvider<Auth, Posts>(
+        //   create: (ctx) => Posts(null, []),
+        //   update: (ctx, auth, previousPosts) => Posts(
+        //     auth.token ?? '',
+        //     previousPosts == null ? [] : previousPosts.posts,
+        //   ),
+        // ),
       ],
-      child: MaterialApp(
-          title: 'Sociopedia',
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: ThemeMode.dark,
-          home: AuthPromptScreen(),
-          routes: {
-            HomeScreen.routeName: (ctx) => HomeScreen(),
-            AuthScreen.routeName: (ctx) => AuthScreen()
-          }),
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+            title: 'Sociopedia',
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: ThemeMode.dark,
+            home: auth.isAuth
+                ? HomeScreen()
+                : FutureBuilder(builder: (context, snapshot) => AuthPromptScreen()),
+            routes: {
+              // HomeScreen.routeName: (ctx) => HomeScreen(),
+              AuthScreen.routeName: (ctx) => AuthScreen()
+            }),
+      ),
     );
   }
 }

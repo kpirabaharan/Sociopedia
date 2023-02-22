@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         title: Text('Sociopedia'),
         // automaticallyImplyLeading: false,
       ),
-      body: Feed(),
+      body: Center(child: Text('Home')),
     );
   }
 }

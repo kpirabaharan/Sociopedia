@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 
+//TODO: Add autologin feature making use of shared preference
+
 class User {
   final String _id;
   final String firstName;

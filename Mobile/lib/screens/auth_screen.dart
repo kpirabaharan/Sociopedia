@@ -2,27 +2,71 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_frontend/screens/home_screen.dart';
 
 import '../providers/auth.dart';
+import '../models/http_exception.dart';
 import '../widgets/auth_form.dart';
 
 enum AuthMode { signup, login }
 
-class AuthScreen extends StatelessWidget {
+var isLoading = false;
+
+class AuthScreen extends StatefulWidget {
   static const routeName = '/auth-screen';
 
   const AuthScreen({super.key});
 
   @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final isRegister = ModalRoute.of(context)!.settings.arguments;
 
-    void _login(String email, String password) async {
+    void showErrorDialog(String message) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An Error Occurred!'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
+
+    Future<void> login(String email, String password) async {
+      setState(() {
+        isLoading = true;
+      });
       try {
         await Provider.of<Auth>(context, listen: false).login(email, password);
-      } catch (err) {
-        print('Error: $err');
+        Navigator.of(context).pop();
+      } on HttpException catch (err) {
+        var errorMessage = 'Authentication failed';
+        if (err.toString().contains('User does not exist')) {
+          errorMessage = 'Invalid email.';
+        } else if (err.toString().contains('Invalid credentials')) {
+          errorMessage = 'Invalid password.';
+        }
+        showErrorDialog(errorMessage);
+      } catch (error) {
+        const errorMessage = 'Could not authenticate you. Please try again later.';
+        showErrorDialog(errorMessage);
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
 
@@ -43,21 +87,22 @@ class AuthScreen extends StatelessWidget {
               ),
             ),
           ),
+          isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: deviceSize.width * 0.90,
+                        child: AuthForm(isRegister as bool, login),
+                      ),
+                    ),
+                  ],
+                ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                  child: Container(
-                width: deviceSize.width * 0.90,
-                child: AuthForm(isRegister as bool, _login),
-              )),
-            ],
-          ),
-          Column(
-            children: [
-              SizedBox(
-                height: 50,
-              ),
+              SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: IconButton(
