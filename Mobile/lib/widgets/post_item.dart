@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/post.dart';
-import 'package:http/http.dart';
 
 class PostItem extends StatelessWidget {
-  final Post post;
-
-  PostItem(this.post);
-
   @override
   Widget build(BuildContext context) {
+    final post = Provider.of<Post>(context, listen: false);
     return Text('Check!');
   }
 }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Post {
+class Post with ChangeNotifier {
   final String _id;
   final String userId;
   // final String firstName;
@@ -31,7 +31,7 @@ class Post {
 
 class Posts with ChangeNotifier {
   final String? _token;
-  List<Post> _posts = [];
+  List<Post> _posts;
 
   Posts(this._token, this._posts);
 
@@ -44,16 +44,14 @@ class Posts with ChangeNotifier {
       final url = Uri.parse("http://localhost:8080/posts");
       final response = await http.get(
         url,
-        headers: {'Authorization': 'Bearer ${_token}'},
+        headers: {'Authorization': 'Bearer $_token'},
       );
 
       List<Post> loadedPosts = [];
 
-      final extractedData = json.decode(response.body) as List<dynamic>;
+      dynamic extractedData = json.decode(response.body) as List<dynamic>;
 
       if (extractedData == null) return;
-
-      // print(extractedData);
 
       for (var post in extractedData) {
         loadedPosts.add(Post(
@@ -68,11 +66,11 @@ class Posts with ChangeNotifier {
         ));
       }
 
-      print(loadedPosts);
+      _posts = loadedPosts;
 
       notifyListeners();
     } catch (err) {
-      rethrow;
+      print('err: $err');
     }
   }
 }

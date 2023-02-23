@@ -88,6 +88,8 @@ class Auth with ChangeNotifier {
         impressions: responseData['user']['impressions'],
       );
       _token = responseData['token'];
+
+      print(_user);
       notifyListeners();
 
       final prefs = await SharedPreferences.getInstance();
@@ -140,7 +142,7 @@ class Auth with ChangeNotifier {
   Future<void> logout() async {
     _token = null;
     _user = null;
-    
+
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
     notifyListeners();
