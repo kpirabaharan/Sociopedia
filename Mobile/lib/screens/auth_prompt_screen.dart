@@ -60,7 +60,8 @@ class AuthPromptScreen extends StatelessWidget {
                   ),
                   Text(
                     'Welcome to Sociopedia\nThe Social Media for Sociopaths!',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    // style: Theme.of(context).theme.bodyLarge,
+                    style: TextStyle(fontSize: 18),
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   ElevatedButton(

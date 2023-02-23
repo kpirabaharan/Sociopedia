@@ -65,13 +65,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
-        // ChangeNotifierProxyProvider<Auth, Posts>(
-        //   create: (ctx) => Posts(null, []),
-        //   update: (ctx, auth, previousPosts) => Posts(
-        //     auth.token ?? '',
-        //     previousPosts == null ? [] : previousPosts.posts,
-        //   ),
-        // ),
+        ChangeNotifierProxyProvider<Auth, Posts>(
+          create: (ctx) => Posts(null, []),
+          update: (ctx, auth, previousPosts) => Posts(
+            auth.token ?? '',
+            previousPosts == null ? [] : previousPosts.posts,
+          ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(

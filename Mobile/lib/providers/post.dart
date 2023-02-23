@@ -5,72 +5,74 @@ import 'package:http/http.dart' as http;
 
 class Post {
   final String _id;
-  final String name;
-  final String location;
-  final String description;
-  final String userPicture;
-  final String picturePath;
-  final int likes;
-  final List<String>? comments;
+  final String userId;
+  // final String firstName;
+  // final String lastName;
+  // final String location;
+  // final String description;
+  // final String userPicturePath;
+  // final String picturePath;
+  // final Map<String, bool>? likes;
+  // final List<String>? comments;
 
   Post(
     this._id, {
-    required this.name,
-    required this.location,
-    required this.description,
-    required this.userPicture,
-    required this.picturePath,
-    this.likes = 0,
-    this.comments,
+    required this.userId,
+    // required this.firstName,
+    // required this.lastName,
+    // required this.location,
+    // required this.description,
+    // required this.picturePath,
+    // required this.userPicturePath,
+    // this.likes,
+    // this.comments,
   });
 }
 
 class Posts with ChangeNotifier {
-  final String? authToken;
+  final String? _token;
   List<Post> _posts = [];
 
-  Posts(this.authToken, this._posts);
+  Posts(this._token, this._posts);
 
   List<Post> get posts {
     return [..._posts];
   }
 
   Future<void> fetchPosts() async {
-    final url = Uri.parse("http://localhost:8080/posts");
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Bearer ${authToken}'},
-    );
+    try {
+      final url = Uri.parse("http://localhost:8080/posts");
+      final response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ${_token}'},
+      );
 
-    final List<Posts> loadedPosts = [];
+      List<Post> loadedPosts = [];
 
-    dynamic extractedData = json.decode(response.body);
+      final extractedData = json.decode(response.body) as List<dynamic>;
 
-    print(extractedData);
+      if (extractedData == null) return;
 
-    if (extractedData == null) return;
+      // print(extractedData);
 
-    // extractedData.forEach((orderId, orderData) {
-    //   loadedOrders.add(
-    //     OrderItem(
-    //       id: orderId,
-    //       amount: orderData['amount'],
-    //       products: (orderData['products'] as List<dynamic>)
-    //           .map(
-    //             (item) => CartItem(
-    //                 id: item['id'],
-    //                 title: item['title'],
-    //                 quantity: item['quantity'],
-    //                 price: item['price']),
-    //           )
-    //           .toList(),
-    //       dateTime: DateTime.parse(orderData['dateTime']),
-    //     ),
-    //   );
-    //   _orders = loadedOrders.reversed.toList();
-    notifyListeners();
-    // });
-    // print(json.decode(response.body));
-    return;
+      for (var post in extractedData) {
+        loadedPosts.add(Post(
+          post['_id']!,
+          userId: post['userId']!,
+          // firstName: post['firstName']!,
+          // lastName: post['lastName']!,
+          // location: post['location']!,
+          // description: post['description']!,
+          // picturePath: post['picturePath']!,
+          // userPicturePath: post['userPicturePath'],
+        ));
+      }
+
+      print(loadedPosts);
+
+      notifyListeners();
+    } catch (err) {
+      rethrow;
+    }
   }
 }

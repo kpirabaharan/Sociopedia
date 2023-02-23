@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Center(child: Text('Home')),
+      body: Feed(),
     );
   }
 }
