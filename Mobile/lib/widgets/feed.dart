@@ -19,6 +19,7 @@ class _FeedState extends State<Feed> {
       final posts = await Provider.of<Posts>(context, listen: false).fetchPosts();
       return posts;
     } catch (err) {
+      //! Try to make this fail and check how it fails
       print(err);
     }
   }
@@ -44,7 +45,7 @@ class _FeedState extends State<Feed> {
             return Consumer<Posts>(
               builder: (ctx, postData, child) => ListView.builder(
                 itemCount: postData.posts.length,
-                itemBuilder: (ctx, i) => Text('Hi'),
+                itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
               ),
             );
           }

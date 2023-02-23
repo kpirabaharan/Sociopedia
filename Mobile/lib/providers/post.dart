@@ -3,29 +3,31 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+//! Fix Likes and Comments Types
+
 class Post {
   final String _id;
   final String userId;
-  // final String firstName;
-  // final String lastName;
-  // final String location;
-  // final String description;
-  // final String userPicturePath;
-  // final String picturePath;
-  // final Map<String, bool>? likes;
-  // final List<String>? comments;
+  final String firstName;
+  final String lastName;
+  final String location;
+  final String description;
+  final String userPicturePath;
+  final String picturePath;
+  final Map<String, dynamic>? likes;
+  final List<dynamic>? comments;
 
   Post(
     this._id, {
     required this.userId,
-    // required this.firstName,
-    // required this.lastName,
-    // required this.location,
-    // required this.description,
-    // required this.picturePath,
-    // required this.userPicturePath,
-    // this.likes,
-    // this.comments,
+    required this.firstName,
+    required this.lastName,
+    required this.location,
+    required this.description,
+    required this.picturePath,
+    required this.userPicturePath,
+    this.likes,
+    this.comments,
   });
 }
 
@@ -53,22 +55,24 @@ class Posts with ChangeNotifier {
 
       if (extractedData == null) return;
 
-      // print(extractedData);
+      print(extractedData[4]['comments']);
 
       for (var post in extractedData) {
         loadedPosts.add(Post(
-          post['_id']!,
-          userId: post['userId']!,
-          // firstName: post['firstName']!,
-          // lastName: post['lastName']!,
-          // location: post['location']!,
-          // description: post['description']!,
-          // picturePath: post['picturePath']!,
-          // userPicturePath: post['userPicturePath'],
+          post['_id'],
+          userId: post['userId'],
+          firstName: post['firstName'],
+          lastName: post['lastName'],
+          location: post['location'],
+          description: post['description'],
+          picturePath: post['picturePath'] ?? '',
+          userPicturePath: post['userPicturePath'],
+          likes: post['likes'],
+          comments: post['comments'],
         ));
       }
 
-      print(loadedPosts);
+      _posts = loadedPosts;
 
       notifyListeners();
     } catch (err) {
