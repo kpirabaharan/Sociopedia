@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 //! Fix Likes and Comments Types
 
 class Post {
-  final String _id;
+  final String id;
   final String userId;
   final String firstName;
   final String lastName;
@@ -18,8 +18,8 @@ class Post {
   final Map<String, bool>? likes;
   final List<String>? comments;
 
-  Post(
-    this._id, {
+  Post({
+    required this.id,
     required this.userId,
     required this.firstName,
     required this.lastName,
@@ -47,7 +47,7 @@ class Posts with ChangeNotifier {
       final url = Uri.parse("http://localhost:8080/posts");
       final response = await http.get(
         url,
-        headers: {'Authorization': 'Bearer ${_token}'},
+        headers: {'Authorization': 'Bearer $_token'},
       );
 
       final List<Post> loadedPosts = [];
@@ -58,7 +58,7 @@ class Posts with ChangeNotifier {
 
       for (var post in extractedData) {
         loadedPosts.add(Post(
-          post['_id'],
+          id: post['_id'],
           userId: post['userId'],
           firstName: post['firstName'],
           lastName: post['lastName'],
@@ -73,6 +73,44 @@ class Posts with ChangeNotifier {
       }
 
       _posts = loadedPosts;
+
+      notifyListeners();
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<void> likePost(String postId, String userId) async {
+    try {
+      final url = Uri.parse("http://localhost:8080/posts/$postId/like");
+      final response = await http.patch(
+        url,
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(
+          {'userId': userId},
+        ),
+      );
+
+      final responseData = json.decode(response.body) as Map<String, dynamic>;
+
+      final postIndex = _posts.indexWhere((element) => element.id == responseData['_id']);
+
+      _posts[postIndex] = Post(
+        id: responseData['_id'],
+        userId: responseData['userId'],
+        firstName: responseData['firstName'],
+        lastName: responseData['lastName'],
+        location: responseData['location'],
+        description: responseData['description'],
+        picturePath: responseData['picturePath'],
+        userPicturePath: responseData['userPicturePath'],
+        likes: (responseData['likes'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, value.toString().toLowerCase() == 'true')),
+        comments: (responseData['comments'] as List).map((item) => item as String).toList(),
+      );
 
       notifyListeners();
     } catch (err) {
