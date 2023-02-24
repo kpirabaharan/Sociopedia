@@ -6,34 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
+import './user.dart';
 
 //TODO: Add AutoLogout after 1hr
-
-class User {
-  final String _id;
-  final String firstName;
-  final String lastName;
-  final List<dynamic> friends;
-  final String email;
-  final String picturePath;
-  final String location;
-  final String occupation;
-  final int viewedProfile;
-  final int impressions;
-
-  User(
-    this._id, {
-    required this.firstName,
-    required this.lastName,
-    required this.friends,
-    required this.email,
-    required this.picturePath,
-    required this.location,
-    required this.occupation,
-    this.viewedProfile = 0,
-    this.impressions = 0,
-  });
-}
 
 class Auth with ChangeNotifier {
   late User? _user;
@@ -51,7 +26,7 @@ class Auth with ChangeNotifier {
   }
 
   String? get userId {
-    return _user!._id;
+    return _user!.id;
   }
 
   Future<void> login(String email, String password) async {
@@ -76,7 +51,7 @@ class Auth with ChangeNotifier {
       }
 
       _user = User(
-        responseData['user']['_id'],
+        id: responseData['user']['_id'],
         firstName: responseData['user']['firstName'],
         lastName: responseData['user']['lastName'],
         friends: responseData['user']['friends'],
@@ -94,7 +69,7 @@ class Auth with ChangeNotifier {
       final userData = json.encode(
         {
           'token': _token,
-          '_id': _user!._id,
+          '_id': _user!.id,
           'firstName': _user!.firstName,
           'lastName': _user!.lastName,
           'friends': _user!.friends,
@@ -122,7 +97,7 @@ class Auth with ChangeNotifier {
 
     _token = extractedUserData['token'] as String;
     _user = User(
-      extractedUserData['_id'],
+      id: extractedUserData['_id'],
       firstName: extractedUserData['firstName'],
       lastName: extractedUserData['lastName'],
       friends: extractedUserData['friends'],
@@ -140,7 +115,7 @@ class Auth with ChangeNotifier {
   Future<void> logout() async {
     _token = null;
     _user = null;
-    
+
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
     notifyListeners();

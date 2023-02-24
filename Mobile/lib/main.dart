@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_frontend/providers/user-profile.dart';
 
 import './providers/auth.dart';
 import './providers/post.dart';
@@ -65,6 +66,13 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, UserProfile>(
+          create: (ctx) => UserProfile(null, null),
+          update: (ctx, auth, previousUser) => UserProfile(
+            auth.token ?? '',
+            previousUser!.user,
+          ),
         ),
         ChangeNotifierProxyProvider<Auth, Posts>(
           create: (ctx) => Posts(null, []),
