@@ -6,6 +6,7 @@ import './providers/post.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/home_screen.dart';
+import './screens/profile-page-screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -86,7 +87,8 @@ class MyApp extends StatelessWidget {
                     builder: (context, snapshot) => AuthPromptScreen()),
             routes: {
               // HomeScreen.routeName: (ctx) => HomeScreen(),
-              AuthScreen.routeName: (ctx) => AuthScreen()
+              AuthScreen.routeName: (ctx) => AuthScreen(),
+              ProfilePage.routeName: (ctx) => ProfilePage(),
             }),
       ),
     );

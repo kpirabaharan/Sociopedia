@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/post.dart';
 import '../providers/auth.dart';
+import '../screens/profile-page-screen.dart';
 
 class PostItem extends StatefulWidget {
   final Post post;
@@ -19,17 +20,27 @@ class _PostItemState extends State<PostItem> {
     await Provider.of<Posts>(context, listen: false).likePost(widget.post.id, id!);
   }
 
+  void _goToProfile() {
+    Navigator.of(context).pushNamed(ProfilePage.routeName, arguments: widget.post.userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       ListTile(
-        leading: CircleAvatar(
-          backgroundImage:
-              NetworkImage('http://localhost:8080/assets/${widget.post.userPicturePath}'),
+        leading: GestureDetector(
+          onTap: _goToProfile,
+          child: CircleAvatar(
+            backgroundImage:
+                NetworkImage('http://localhost:8080/assets/${widget.post.userPicturePath}'),
+          ),
         ),
-        title: Text(
-          widget.post.firstName,
-          // style: Theme.of(context).textTheme.titleMedium,
+        title: GestureDetector(
+          onTap: _goToProfile,
+          child: Text(
+            widget.post.firstName,
+            // style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         subtitle: Text(widget.post.location),
         trailing: IconButton(onPressed: () => {}, icon: Icon(Icons.person_add)),
