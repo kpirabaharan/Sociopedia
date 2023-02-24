@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -13,9 +14,9 @@ class Post {
   final String location;
   final String description;
   final String userPicturePath;
-  final String picturePath;
-  final Map<String, dynamic>? likes;
-  final List<dynamic>? comments;
+  final String? picturePath;
+  final Map<String, bool>? likes;
+  final List<String>? comments;
 
   Post(
     this._id, {
@@ -49,13 +50,11 @@ class Posts with ChangeNotifier {
         headers: {'Authorization': 'Bearer ${_token}'},
       );
 
-      List<Post> loadedPosts = [];
+      final List<Post> loadedPosts = [];
 
       final extractedData = json.decode(response.body) as List<dynamic>;
 
       if (extractedData == null) return;
-
-      print(extractedData[4]['comments']);
 
       for (var post in extractedData) {
         loadedPosts.add(Post(
@@ -65,10 +64,11 @@ class Posts with ChangeNotifier {
           lastName: post['lastName'],
           location: post['location'],
           description: post['description'],
-          picturePath: post['picturePath'] ?? '',
+          picturePath: post['picturePath'],
           userPicturePath: post['userPicturePath'],
-          likes: post['likes'],
-          comments: post['comments'],
+          likes: (post['likes'] as Map<String, dynamic>)
+              .map((key, value) => MapEntry(key, value.toString().toLowerCase() == 'true')),
+          comments: (post['comments'] as List).map((item) => item as String).toList(),
         ));
       }
 
