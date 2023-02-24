@@ -19,9 +19,13 @@ class _FeedState extends State<Feed> {
       final posts = await Provider.of<Posts>(context, listen: false).fetchPosts();
       return posts;
     } catch (err) {
-      //! Try to make this fail and check how it fails
+      //TODO: Try to make this fail and check how it fails
       print(err);
     }
+  }
+
+  Future _refreshProducts() {
+    return Provider.of<Posts>(context, listen: false).fetchPosts();
   }
 
   @override
@@ -32,25 +36,28 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _postsFuture,
-      builder: ((ctx, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else {
-          if (snapshot.error != null) {
-            // Do Error Handling Here
-            return Center(child: Text('An Error Occured!'));
+    return RefreshIndicator(
+      onRefresh: _refreshProducts,
+      child: FutureBuilder(
+        future: _postsFuture,
+        builder: ((ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
           } else {
-            return Consumer<Posts>(
-              builder: (ctx, postData, child) => ListView.builder(
-                itemCount: postData.posts.length,
-                itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
-              ),
-            );
+            if (snapshot.error != null) {
+              // Do Error Handling Here
+              return Center(child: Text('An Error Occured!'));
+            } else {
+              return Consumer<Posts>(
+                builder: (ctx, postData, child) => ListView.builder(
+                  itemCount: postData.posts.length,
+                  itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
+                ),
+              );
+            }
           }
-        }
-      }),
+        }),
+      ),
     );
   }
 }
