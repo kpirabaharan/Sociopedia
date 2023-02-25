@@ -24,15 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sociopedia'),
-        actions: [
-          IconButton(
-            onPressed: () => Provider.of<Auth>(context, listen: false).logout(),
-            icon: Icon(Icons.logout),
-          )
-        ],
-      ),
       body: RefreshIndicator(
         onRefresh: _refreshProducts,
         child: Column(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_frontend/providers/user-profile.dart';
 
 import './providers/auth.dart';
 import './providers/post.dart';
+import './providers/user-profile.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/tab_screen.dart';
 import './screens/home_screen.dart';
 import './screens/profile_page_screen.dart';
 
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: ThemeMode.dark,
             home: auth.isAuth
-                ? HomeScreen()
+                ? TabScreen()
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (context, snapshot) => AuthPromptScreen()),
