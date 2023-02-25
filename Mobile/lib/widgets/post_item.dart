@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/post.dart';
 import '../providers/auth.dart';
-import '../screens/profile-page-screen.dart';
+import '../screens/profile_page_screen.dart';
 
 class PostItem extends StatefulWidget {
   final Post post;
@@ -31,8 +31,9 @@ class _PostItemState extends State<PostItem> {
         leading: GestureDetector(
           onTap: _goToProfile,
           child: CircleAvatar(
-            backgroundImage:
-                NetworkImage('http://localhost:8080/assets/${widget.post.userPicturePath}'),
+            backgroundImage: NetworkImage(
+              'http://localhost:8080/assets/${widget.post.userPicturePath}',
+            ),
           ),
         ),
         title: GestureDetector(
@@ -43,59 +44,68 @@ class _PostItemState extends State<PostItem> {
           ),
         ),
         subtitle: Text(widget.post.location),
-        trailing: IconButton(onPressed: () => {}, icon: Icon(Icons.person_add)),
+        trailing: IconButton(
+          onPressed: () => {},
+          icon: Icon(Icons.person_add),
+        ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
         child: Text(widget.post.description),
       ),
       if (widget.post.picturePath != null)
         Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(15),
           height: 500,
           width: double.infinity,
-          child: Image.network(
-            'http://localhost:8080/assets/${widget.post.picturePath}',
-            errorBuilder: (context, error, stackTrace) =>
-                Center(child: Text('Could not load Image')),
-            fit: BoxFit.cover,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              'http://localhost:8080/assets/${widget.post.picturePath}',
+              errorBuilder: (context, error, stackTrace) =>
+                  Center(child: Text('Could not load Image')),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Consumer<Auth>(
-            builder: (context, user, child) => TextButton.icon(
-              onPressed: _likePost,
-              icon: Icon(
-                Icons.favorite,
-                color: widget.post.likes!.containsKey(user.userId)
-                    ? Colors.blue.shade400
-                    : Colors.white,
-              ),
-              label: Text(
-                '${widget.post.likes?.length ?? '0'}',
-                style: TextStyle(
-                  color: Colors.white,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Consumer<Auth>(
+              builder: (context, user, child) => TextButton.icon(
+                onPressed: _likePost,
+                icon: Icon(
+                  Icons.favorite,
+                  color: widget.post.likes!.containsKey(user.userId)
+                      ? Colors.blue.shade400
+                      : Colors.white,
+                ),
+                label: Text(
+                  '${widget.post.likes?.length ?? '0'}',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-          TextButton.icon(
-            onPressed: () => {},
-            icon: Icon(
-              Icons.comment,
+            TextButton.icon(
+              onPressed: () => {},
+              icon: Icon(
+                Icons.comment,
+              ),
+              label: Text(
+                widget.post.comments!.length.toString(),
+              ),
             ),
-            label: Text(
-              widget.post.comments!.length.toString(),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () => {},
             ),
-          ),
-          Spacer(),
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () => {},
-          ),
-        ],
+          ],
+        ),
       ),
       Divider(
         thickness: 2,

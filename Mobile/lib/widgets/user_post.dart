@@ -3,37 +3,37 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PostWidget extends StatefulWidget {
-  const PostWidget({super.key});
+class UserPost extends StatefulWidget {
+  const UserPost({super.key});
 
   @override
-  State<PostWidget> createState() => _PostWidgetState();
+  State<UserPost> createState() => _UserPostState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _UserPostState extends State<UserPost> {
   @override
   Widget build(BuildContext context) {
-    File? _storedImage;
+    // File? _storedImage;
 
-    Future<void> _takePicture() async {
-      final picker = ImagePicker();
-      XFile? pickedXFile;
+    // Future<void> _takePicture() async {
+    //   final picker = ImagePicker();
+    //   XFile? pickedXFile;
 
-      pickedXFile = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 600,
-      );
+    //   pickedXFile = await picker.pickImage(
+    //     source: ImageSource.gallery,
+    //     maxWidth: 600,
+    //   );
 
-      if (pickedXFile == null) {
-        return;
-      }
+    //   if (pickedXFile == null) {
+    //     return;
+    //   }
 
-      final imageFile = File(pickedXFile.path);
+    //   final imageFile = File(pickedXFile.path);
 
-      setState(() {
-        _storedImage = imageFile;
-      });
-    }
+    //   setState(() {
+    //     _storedImage = imageFile;
+    //   });
+    // }
 
     return Card(
       shape: RoundedRectangleBorder(

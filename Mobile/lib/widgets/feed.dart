@@ -24,10 +24,6 @@ class _FeedState extends State<Feed> {
     }
   }
 
-  Future _refreshProducts() {
-    return Provider.of<Posts>(context, listen: false).fetchPosts();
-  }
-
   @override
   void initState() {
     _postsFuture = _obtainPostsFuture();
@@ -36,28 +32,25 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _refreshProducts,
-      child: FutureBuilder(
-        future: _postsFuture,
-        builder: ((ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+    return FutureBuilder(
+      future: _postsFuture,
+      builder: ((ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          if (snapshot.error != null) {
+            // Do Error Handling Here
+            return Center(child: Text('An Error Occured!'));
           } else {
-            if (snapshot.error != null) {
-              // Do Error Handling Here
-              return Center(child: Text('An Error Occured!'));
-            } else {
-              return Consumer<Posts>(
-                builder: (ctx, postData, child) => ListView.builder(
-                  itemCount: postData.posts.length,
-                  itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
-                ),
-              );
-            }
+            return Consumer<Posts>(
+              builder: (ctx, postData, child) => ListView.builder(
+                itemCount: postData.posts.length,
+                itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
+              ),
+            );
           }
-        }),
-      ),
+        }
+      }),
     );
   }
 }

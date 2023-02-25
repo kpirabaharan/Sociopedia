@@ -7,7 +7,7 @@ import './user.dart';
 
 class UserProfile with ChangeNotifier {
   late User? _user;
-  String? _token;
+  final String _token;
 
   UserProfile(this._token, this._user);
 
@@ -24,8 +24,6 @@ class UserProfile with ChangeNotifier {
       );
 
       final responseData = json.decode(response.body);
-
-      print(responseData);
 
       _user = User(
         id: responseData['_id'],

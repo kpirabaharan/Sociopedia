@@ -7,7 +7,11 @@ import './providers/post.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/home_screen.dart';
-import './screens/profile-page-screen.dart';
+import './screens/profile_page_screen.dart';
+
+//TODO: Add Connection State and Error Checks to FutureBuilders
+//TODO: Proper Error Handling for Every Catch Statment and Fetch Requests
+//! Make Page Scrollable
 
 void main() => runApp(const MyApp());
 
@@ -40,7 +44,9 @@ class MyApp extends StatelessWidget {
         titleLarge: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold),
       ),
     );
-    final darkTheme = ThemeData.dark();
+    final darkTheme = ThemeData(
+        brightness: Brightness.dark,
+        textTheme: TextTheme(headlineSmall: TextStyle(fontWeight: FontWeight.bold)));
     // ThemeData(
     //   colorScheme:
     //       ColorScheme.fromSwatch(primarySwatch: darkColor).copyWith(secondary: Colors.blue),
@@ -68,14 +74,14 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, UserProfile>(
-          create: (ctx) => UserProfile(null, null),
+          create: (ctx) => UserProfile('', null),
           update: (ctx, auth, previousUser) => UserProfile(
             auth.token ?? '',
             previousUser!.user,
           ),
         ),
         ChangeNotifierProxyProvider<Auth, Posts>(
-          create: (ctx) => Posts(null, []),
+          create: (ctx) => Posts('', []),
           update: (ctx, auth, previousPosts) => Posts(
             auth.token ?? '',
             previousPosts == null ? [] : previousPosts.posts,
@@ -84,6 +90,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Sociopedia',
             theme: lightTheme,
             darkTheme: darkTheme,

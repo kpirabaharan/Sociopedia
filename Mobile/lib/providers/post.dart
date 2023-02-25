@@ -30,7 +30,7 @@ class Post {
 }
 
 class Posts with ChangeNotifier {
-  final String? _token;
+  final String _token;
   List<Post> _posts = [];
 
   Posts(this._token, this._posts);
