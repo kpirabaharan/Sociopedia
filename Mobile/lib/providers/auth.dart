@@ -30,9 +30,8 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    final url = Uri.parse('http://localhost:8080/auth/login');
-
     try {
+      final url = Uri.parse('http://localhost:8080/auth/login');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -54,7 +53,18 @@ class Auth with ChangeNotifier {
         id: responseData['user']['_id'],
         firstName: responseData['user']['firstName'],
         lastName: responseData['user']['lastName'],
-        friends: responseData['user']['friends'],
+        friends: (responseData['user']['friends'] as List)
+            .map(
+              (friend) => Friend(
+                id: friend['_id'],
+                firstName: friend['firstName'],
+                lastName: friend['lastName'],
+                picturePath: friend['picturePath'],
+                location: friend['location'],
+                occupation: friend['occupation'],
+              ),
+            )
+            .toList(),
         email: responseData['user']['email'],
         picturePath: responseData['user']['picturePath'],
         location: responseData['user']['location'],
@@ -100,7 +110,18 @@ class Auth with ChangeNotifier {
       id: extractedUserData['_id'],
       firstName: extractedUserData['firstName'],
       lastName: extractedUserData['lastName'],
-      friends: extractedUserData['friends'],
+      friends: (extractedUserData['friends'] as List)
+          .map(
+            (friend) => Friend(
+              id: friend['_id'],
+              firstName: friend['firstName'],
+              lastName: friend['lastName'],
+              picturePath: friend['picturePath'],
+              location: friend['location'],
+              occupation: friend['occupation'],
+            ),
+          )
+          .toList(),
       email: extractedUserData['email'],
       picturePath: extractedUserData['picturePath'],
       location: extractedUserData['location'],
