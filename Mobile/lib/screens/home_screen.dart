@@ -37,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _refreshProducts,
         child: Column(
           children: [
-            
             Expanded(child: Feed()),
           ],
         ),

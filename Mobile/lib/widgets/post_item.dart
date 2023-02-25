@@ -50,63 +50,106 @@ class _PostItemState extends State<PostItem> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+        padding: const EdgeInsets.fromLTRB(16, 5, 16, 0),
         child: Text(widget.post.description),
       ),
-      if (widget.post.picturePath != null)
-        Container(
-          padding: EdgeInsets.all(15),
-          height: 500,
-          width: double.infinity,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              'http://localhost:8080/assets/${widget.post.picturePath}',
-              errorBuilder: (context, error, stackTrace) =>
-                  Center(child: Text('Could not load Image')),
-              fit: BoxFit.cover,
+      Stack(alignment: AlignmentDirectional.bottomStart, children: [
+        if (widget.post.picturePath != null)
+          Container(
+            padding: EdgeInsets.all(15),
+            height: 400,
+            width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                'http://localhost:8080/assets/${widget.post.picturePath}',
+                errorBuilder: (context, error, stackTrace) =>
+                    Center(child: Text('Could not load Image')),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Consumer<Auth>(
-              builder: (context, user, child) => TextButton.icon(
-                onPressed: _likePost,
-                icon: Icon(
-                  Icons.favorite,
-                  color: widget.post.likes!.containsKey(user.userId)
-                      ? Colors.blue.shade400
-                      : Colors.white,
+        if (widget.post.picturePath != null)
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Consumer<Auth>(
+                  builder: (context, user, child) => TextButton.icon(
+                    onPressed: _likePost,
+                    icon: Icon(
+                      Icons.favorite,
+                      color: widget.post.likes!.containsKey(user.userId)
+                          ? Colors.blue.shade400
+                          : Colors.white,
+                    ),
+                    label: Text(
+                      '${widget.post.likes?.length ?? '0'}',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                label: Text(
-                  '${widget.post.likes?.length ?? '0'}',
-                  style: TextStyle(
-                    color: Colors.white,
+                TextButton.icon(
+                  onPressed: () => {},
+                  icon: Icon(
+                    Icons.comment,
+                  ),
+                  label: Text(
+                    widget.post.comments!.length.toString(),
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () => {},
+                ),
+              ],
+            ),
+          ),
+      ]),
+      if (widget.post.picturePath == null)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 5, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Consumer<Auth>(
+                builder: (context, user, child) => TextButton.icon(
+                  onPressed: _likePost,
+                  icon: Icon(
+                    Icons.favorite,
+                    color: widget.post.likes!.containsKey(user.userId)
+                        ? Colors.blue.shade400
+                        : Colors.white,
+                  ),
+                  label: Text(
+                    '${widget.post.likes?.length ?? '0'}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            TextButton.icon(
-              onPressed: () => {},
-              icon: Icon(
-                Icons.comment,
+              TextButton.icon(
+                onPressed: () => {},
+                icon: Icon(
+                  Icons.comment,
+                ),
+                label: Text(
+                  widget.post.comments!.length.toString(),
+                ),
               ),
-              label: Text(
-                widget.post.comments!.length.toString(),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () => {},
               ),
-            ),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () => {},
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       Divider(
         thickness: 2,
       ),
