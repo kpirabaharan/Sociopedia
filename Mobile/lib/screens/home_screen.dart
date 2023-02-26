@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/auth.dart';
 import '../providers/post.dart';
 
-import '../widgets/user_post.dart';
 import '../widgets/feed.dart';
 
 class HomeScreen extends StatefulWidget {

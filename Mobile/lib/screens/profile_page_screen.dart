@@ -9,8 +9,10 @@ import '../widgets/profile_overview.dart';
 
 class ProfilePage extends StatefulWidget {
   static const routeName = '/profile-page-screen';
+  final String userId;
+  final bool isMainUser;
 
-  const ProfilePage({super.key});
+  const ProfilePage(this.userId, this.isMainUser, {super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -31,8 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final userId = ModalRoute.of(context)!.settings.arguments as String;
-      _userFuture = _obtainUserFuture(userId);
+      _userFuture = _obtainUserFuture(widget.userId);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -49,20 +50,24 @@ class _ProfilePageState extends State<ProfilePage> {
           body: Padding(
             padding: EdgeInsets.only(top: mediaQuery.padding.top),
             child: Stack(children: [
-              ProfileOverview(user: userData.user as User),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: IconButton(
-                      icon: Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              )
+              Padding(
+                padding: widget.isMainUser ? const EdgeInsets.only(top: 12.0) : EdgeInsets.all(0),
+                child: ProfileOverview(user: userData.user as User),
+              ),
+              if (!widget.isMainUser)
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: IconButton(
+                        icon: Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                  ],
+                )
             ]),
           ),
         ),

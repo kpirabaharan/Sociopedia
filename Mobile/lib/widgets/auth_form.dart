@@ -19,8 +19,8 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   var _isInit = true;
   AuthMode _authMode = AuthMode.login;
-
   final _formKey = GlobalKey<FormState>();
+
   final Map<String, String> _authData = {
     'email': '',
     'password': '',

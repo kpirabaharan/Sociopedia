@@ -6,7 +6,7 @@ import './providers/post.dart';
 import './providers/user-profile.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
-import './screens/tab_screen.dart';
+import './screens/tabs_screen.dart';
 import './screens/home_screen.dart';
 import './screens/profile_page_screen.dart';
 
@@ -97,14 +97,13 @@ class MyApp extends StatelessWidget {
             darkTheme: darkTheme,
             themeMode: ThemeMode.dark,
             home: auth.isAuth
-                ? TabScreen()
+                ? TabsScreen()
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (context, snapshot) => AuthPromptScreen()),
             routes: {
               // HomeScreen.routeName: (ctx) => HomeScreen(),
               AuthScreen.routeName: (ctx) => AuthScreen(),
-              ProfilePage.routeName: (ctx) => ProfilePage(),
             }),
       ),
     );

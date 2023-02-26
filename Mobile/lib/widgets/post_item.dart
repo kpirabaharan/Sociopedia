@@ -21,7 +21,8 @@ class _PostItemState extends State<PostItem> {
   }
 
   void _goToProfile() {
-    Navigator.of(context).pushNamed(ProfilePage.routeName, arguments: widget.post.userId);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => ProfilePage(widget.post.id, false)));
   }
 
   @override
@@ -99,6 +100,9 @@ class _PostItemState extends State<PostItem> {
                   ),
                   label: Text(
                     widget.post.comments!.length.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 Spacer(),
@@ -140,6 +144,9 @@ class _PostItemState extends State<PostItem> {
                 ),
                 label: Text(
                   widget.post.comments!.length.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Spacer(),
