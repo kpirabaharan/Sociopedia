@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class Post {
   final String id;
@@ -37,6 +39,60 @@ class Posts with ChangeNotifier {
 
   List<Post> get posts {
     return [..._posts];
+  }
+
+  Future<void> createPost(
+      String userId, String description, File? picture, String? picturePath) async {
+    try {
+      final dio = Dio();
+      dio.options.headers["Authorization"] = 'Bearer $_token';
+      const url = 'http://localhost:8080/posts';
+
+      var formData = FormData();
+
+      if (picture == null) {
+        formData = FormData.fromMap({
+          'userId': userId,
+          'description': description,
+        });
+      } else {
+        formData = FormData.fromMap({
+          'userId': userId,
+          'description': description,
+          'picturePath': picturePath,
+          'picture': await MultipartFile.fromFile(picture.path),
+        });
+      }
+
+      final response = await dio.post(
+        url,
+        data: formData,
+      );
+
+      final List<Post> loadedPosts = [];
+
+      for (var post in response.data) {
+        loadedPosts.add(Post(
+          id: post['_id'],
+          userId: post['userId'],
+          firstName: post['firstName'],
+          lastName: post['lastName'],
+          location: post['location'],
+          description: post['description'],
+          picturePath: post['picturePath'],
+          userPicturePath: post['userPicturePath'],
+          likes: (post['likes'] as Map<String, dynamic>)
+              .map((key, value) => MapEntry(key, value.toString().toLowerCase() == 'true')),
+          comments: (post['comments'] as List).map((item) => item as String).toList(),
+        ));
+      }
+
+      _posts = loadedPosts;
+
+      notifyListeners();
+    } catch (err) {
+      rethrow;
+    }
   }
 
   Future<void> fetchPosts() async {
