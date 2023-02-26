@@ -22,7 +22,7 @@ class _PostItemState extends State<PostItem> {
 
   void _goToProfile() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => ProfilePage(widget.post.id, false)));
+        .push(MaterialPageRoute(builder: (_) => ProfilePage(widget.post.userId, false)));
   }
 
   @override
