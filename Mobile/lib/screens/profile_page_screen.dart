@@ -10,6 +10,7 @@ import '../widgets/profile_overview.dart';
 class ProfilePage extends StatefulWidget {
   static const routeName = '/profile-page-screen';
   final String userId;
+
   final bool isMainUser;
 
   const ProfilePage(this.userId, this.isMainUser, {super.key});
@@ -42,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-
+    print(widget.userId);
     return FutureBuilder(
         future: _userFuture,
         builder: (context, snapshot) {

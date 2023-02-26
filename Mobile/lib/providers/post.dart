@@ -95,9 +95,9 @@ class Posts with ChangeNotifier {
     }
   }
 
-  Future<void> fetchPosts() async {
+  Future<void> fetchPosts({String userId = ''}) async {
     try {
-      final url = Uri.parse("http://localhost:8080/posts");
+      final url = Uri.parse("http://localhost:8080/posts/$userId");
       final response = await http.get(
         url,
         headers: {'Authorization': 'Bearer $_token'},

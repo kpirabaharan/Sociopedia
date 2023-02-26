@@ -5,7 +5,8 @@ import '../providers/post.dart';
 import './post_item.dart';
 
 class Feed extends StatefulWidget {
-  const Feed({super.key});
+  final bool allPosts;
+  const Feed({this.allPosts = true, super.key});
 
   @override
   State<Feed> createState() => _FeedState();
