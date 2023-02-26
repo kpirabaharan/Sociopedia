@@ -15,6 +15,7 @@ class PostItem extends StatefulWidget {
 }
 
 class _PostItemState extends State<PostItem> {
+  var _isComments = false;
   Future<void> _likePost() async {
     final id = Provider.of<Auth>(context, listen: false).userId;
     await Provider.of<Posts>(context, listen: false).likePost(widget.post.id, id!);
@@ -23,6 +24,12 @@ class _PostItemState extends State<PostItem> {
   void _goToProfile() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => ProfilePage(widget.post.userId, false)));
+  }
+
+  void _toggleComments() {
+    setState(() {
+      _isComments = !_isComments;
+    });
   }
 
   @override
@@ -94,9 +101,10 @@ class _PostItemState extends State<PostItem> {
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: () => {},
+                  onPressed: widget.post.comments!.isEmpty ? null : _toggleComments,
                   icon: Icon(
                     Icons.comment,
+                    color: Colors.white,
                   ),
                   label: Text(
                     widget.post.comments!.length.toString(),
@@ -138,9 +146,10 @@ class _PostItemState extends State<PostItem> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () => {},
+                onPressed: widget.post.comments!.isEmpty ? null : _toggleComments,
                 icon: Icon(
                   Icons.comment,
+                  color: Colors.white,
                 ),
                 label: Text(
                   widget.post.comments!.length.toString(),
@@ -157,6 +166,26 @@ class _PostItemState extends State<PostItem> {
             ],
           ),
         ),
+      if (_isComments)
+        if (widget.post.comments!.length > 0)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Container(
+              height: (30 * widget.post.comments!.length).toDouble() > 60
+                  ? 90
+                  : (30 * widget.post.comments!.length).toDouble(),
+              child: ListView.builder(
+                itemBuilder: (context, index) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(widget.post.comments![index]),
+                    Divider(),
+                  ],
+                ),
+                itemCount: widget.post.comments!.length,
+              ),
+            ),
+          ),
       Divider(
         thickness: 2,
       ),
