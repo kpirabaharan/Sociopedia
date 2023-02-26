@@ -44,34 +44,47 @@ class _ProfilePageState extends State<ProfilePage> {
     final mediaQuery = MediaQuery.of(context);
 
     return FutureBuilder(
-      future: _userFuture,
-      builder: (context, snapshot) => Consumer<UserProfile>(
-        builder: (context, userData, child) => Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(top: mediaQuery.padding.top),
-            child: Stack(children: [
-              Padding(
-                padding: widget.isMainUser ? const EdgeInsets.only(top: 12.0) : EdgeInsets.all(0),
-                child: ProfileOverview(user: userData.user as User),
-              ),
-              if (!widget.isMainUser)
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: IconButton(
-                        icon: Platform.isIOS ? Icon(Icons.arrow_back_ios) : Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+        future: _userFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.error != null) {
+              return Center(child: Text('An Error Occured!'));
+            } else {
+              return Consumer<UserProfile>(
+                builder: (context, userData, child) => Scaffold(
+                  body: Padding(
+                    padding: EdgeInsets.only(top: mediaQuery.padding.top),
+                    child: Stack(children: [
+                      Padding(
+                        padding: widget.isMainUser
+                            ? const EdgeInsets.only(top: 12.0)
+                            : EdgeInsets.all(0),
+                        child: ProfileOverview(user: userData.user as User),
                       ),
-                    )
-                  ],
-                )
-            ]),
-          ),
-        ),
-      ),
-    );
+                      if (!widget.isMainUser)
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: IconButton(
+                                icon: Platform.isIOS
+                                    ? Icon(Icons.arrow_back_ios)
+                                    : Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            )
+                          ],
+                        )
+                    ]),
+                  ),
+                ),
+              );
+            }
+          }
+        });
   }
 }
