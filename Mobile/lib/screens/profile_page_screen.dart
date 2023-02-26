@@ -2,9 +2,11 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_frontend/widgets/feed.dart';
 
 import '../providers/user-profile.dart';
 import '../providers/user.dart';
+import '../providers/post.dart';
 import '../widgets/profile_overview.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -31,6 +33,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void _goBack(BuildContext ctx) {
+    Provider.of<Posts>(ctx, listen: false)
+        .fetchPosts(userId: '')
+        .then((_) => Navigator.of(ctx).pop());
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -43,7 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    print(widget.userId);
     return FutureBuilder(
         future: _userFuture,
         builder: (context, snapshot) {
@@ -62,7 +69,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: widget.isMainUser
                             ? const EdgeInsets.only(top: 12.0)
                             : EdgeInsets.all(0),
-                        child: ProfileOverview(user: userData.user as User),
+                        child: Column(children: [
+                          ProfileOverview(user: userData.user as User),
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Feed(userId: widget.userId),
+                          ))
+                        ]),
                       ),
                       if (!widget.isMainUser)
                         Column(
@@ -73,9 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 icon: Platform.isIOS
                                     ? Icon(Icons.arrow_back_ios)
                                     : Icon(Icons.arrow_back),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
+                                onPressed: () => _goBack(context),
                               ),
                             )
                           ],

@@ -15,18 +15,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future _refreshProducts() {
-    return Provider.of<Posts>(context, listen: false).fetchPosts();
+  Future _refreshProducts() async {
+    await Provider.of<Posts>(context, listen: false).fetchPosts();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Hi');
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshProducts,
         child: Column(
           children: [
-            Expanded(child: Feed()),
+            Expanded(
+                child: Feed(
+              userId: '',
+            )),
           ],
         ),
       ),

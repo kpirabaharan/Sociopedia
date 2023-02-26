@@ -5,8 +5,8 @@ import '../providers/post.dart';
 import './post_item.dart';
 
 class Feed extends StatefulWidget {
-  final bool allPosts;
-  const Feed({this.allPosts = true, super.key});
+  final String userId;
+  const Feed({required this.userId, super.key});
 
   @override
   State<Feed> createState() => _FeedState();
@@ -17,8 +17,7 @@ class _FeedState extends State<Feed> {
 
   Future _obtainPostsFuture() async {
     try {
-      final posts = await Provider.of<Posts>(context, listen: false).fetchPosts();
-      return posts;
+      await Provider.of<Posts>(context, listen: false).fetchPosts(userId: widget.userId);
     } catch (err) {
       //TODO: Try to make this fail and check how it fails
       print(err);
