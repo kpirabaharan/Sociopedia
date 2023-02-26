@@ -79,16 +79,16 @@ class Auth with ChangeNotifier {
       final userData = json.encode(
         {
           'token': _token,
-          '_id': _user!.id,
-          'firstName': _user!.firstName,
-          'lastName': _user!.lastName,
-          'friends': _user!.friends,
-          'email': _user!.email,
-          'picturePath': _user!.picturePath,
-          'location': _user!.location,
-          'occupation': _user!.occupation,
-          'viewedProfile': _user!.viewedProfile,
-          'impressions': _user!.impressions,
+          '_id': responseData['user']['_id'],
+          'firstName': responseData['user']['firstName'],
+          'lastName': responseData['user']['lastName'],
+          'friends': responseData['user']['friends'],
+          'email': responseData['user']['email'],
+          'picturePath': responseData['user']['picturePath'],
+          'location': responseData['user']['location'],
+          'occupation': responseData['user']['occupation'],
+          'viewedProfile': responseData['user']['viewedProfile'],
+          'impressions': responseData['user']['impressions'],
         },
       );
       prefs.setString('userData', userData);
