@@ -27,6 +27,8 @@ const Friend = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
+  console.log(_id);
+
   const isFriend = friends.find((friend) => friend._id === friendId);
   //   console.log(friendId, friends);
   console.log('user', user);
@@ -74,7 +76,7 @@ const Friend = ({
           </Typography>
         </Box>
       </FlexBetween>
-      {!isProfile && isUserProfile && (
+      {_id !== friendId && !isProfile && isUserProfile && (
         <IconButton
           onClick={() => patchFriend()}
           sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
