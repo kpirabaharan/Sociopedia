@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_frontend/providers/user.dart';
+import 'package:social_media_frontend/widgets/friend.dart';
 
 import '../providers/post.dart';
 import '../providers/auth.dart';
@@ -16,6 +18,7 @@ class PostItem extends StatefulWidget {
 
 class _PostItemState extends State<PostItem> {
   var _isComments = false;
+
   Future<void> _likePost() async {
     final id = Provider.of<Auth>(context, listen: false).userId;
     await Provider.of<Posts>(context, listen: false).likePost(widget.post.id, id!);
@@ -35,27 +38,12 @@ class _PostItemState extends State<PostItem> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      ListTile(
-        leading: GestureDetector(
-          onTap: _goToProfile,
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(
-              'http://localhost:8080/assets/${widget.post.userPicturePath}',
-            ),
-          ),
-        ),
-        title: GestureDetector(
-          onTap: _goToProfile,
-          child: Text(
-            widget.post.firstName,
-            // style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
-        subtitle: Text(widget.post.location),
-        trailing: IconButton(
-          onPressed: () => {},
-          icon: Icon(Icons.person_add),
-        ),
+      FriendListTile(
+        id: widget.post.userId,
+        firstName: widget.post.firstName,
+        picturePath: widget.post.userPicturePath,
+        location: widget.post.location,
+        launchProfile: _goToProfile,
       ),
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 5, 16, 0),

@@ -21,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Hi');
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshProducts,
