@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 import '../models/http_exception.dart';
 import './user.dart';
@@ -101,6 +103,32 @@ class Auth with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<void> register(String firstName, String lastName, String location, String occupation,
+      File picture, String picturePath, String email, String password) async {
+    try {
+      final dio = Dio();
+      const url = 'http://localhost:8080/auth/register';
+
+      final formData = FormData.fromMap({
+        'firstName': firstName,
+        'lastName': lastName,
+        'location': location,
+        'occupation': occupation,
+        'picturePath': picturePath,
+        'email': email,
+        'password': password,
+        'picture': await MultipartFile.fromFile(picture.path),
+      });
+
+      final response = await dio.post(
+        url,
+        data: formData,
+      );
     } catch (err) {
       rethrow;
     }

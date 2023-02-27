@@ -44,6 +44,7 @@ class _FeedState extends State<Feed> {
           } else {
             return Consumer<Posts>(
               builder: (ctx, postData, child) => ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: postData.posts.length,
                 itemBuilder: (ctx, i) => PostItem(postData.posts[i]),
               ),

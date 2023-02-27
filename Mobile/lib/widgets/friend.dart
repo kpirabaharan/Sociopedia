@@ -42,7 +42,6 @@ class _FriendListTileState extends State<FriendListTile> {
   void initState() {
     final userId = Provider.of<Auth>(context, listen: false).userId as String;
     isUser = userId == widget.id;
-    print({widget.id: isUser});
     _getFriendsFuture = _obtainFriendsFuture();
     super.initState();
   }

@@ -53,7 +53,6 @@ class _TabsScreenState extends State<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
-    print(_selectedPageIndex);
   }
 
   void _createPost(BuildContext ctx) {

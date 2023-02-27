@@ -7,12 +7,13 @@ import './providers/user-profile.dart';
 import './screens/auth_prompt_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/tabs_screen.dart';
-import './screens/home_screen.dart';
-import './screens/profile_page_screen.dart';
 
-//TODO: Add Connection State and Error Checks to FutureBuilders
-//TODO: Proper Error Handling for Every Catch Statment and Fetch Requests
-//! Make Page Scrollable
+//TODO: Add Connection State and Error Checks to FutureBuilders (waste of time)
+//TODO: Proper Error Handling for Every Catch Statment and Fetch Requests (waste of time after one)
+
+//TODO: Some features I can add (only worth if they are tough to implement)
+//TODO: 1. Rework Existing Comments Model Kinda Sucky and Add/Remove Comments to Each Post
+//TODO: 2. Add Friends View Widget
 
 void main() => runApp(const MyApp());
 

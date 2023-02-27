@@ -1,16 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:social_media_frontend/screens/auth_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
-import './image_input.dart';
+import '../screens/auth_screen.dart';
 
 //TODO: Add FocusNodes to TextForms
 class AuthForm extends StatefulWidget {
   final bool isRegister;
   final void Function(String email, String password) loginFn;
+  final void Function(String firstName, String lastName, String location, String occupation,
+      File picture, String picturePath, String email, String password) registerFn;
 
-  const AuthForm(this.isRegister, this.loginFn, {super.key});
+  const AuthForm(this.isRegister, this.loginFn, this.registerFn, {super.key});
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -21,13 +24,16 @@ class _AuthFormState extends State<AuthForm> {
   AuthMode _authMode = AuthMode.login;
   final _formKey = GlobalKey<FormState>();
 
+  File? _storedImage;
+
   final Map<String, String> _authData = {
-    'email': '',
-    'password': '',
     'firstName': '',
     'lastName': '',
     'location': '',
     'occupation': '',
+    'picturePath': '',
+    'email': '',
+    'password': '',
   };
 
   @override
@@ -59,14 +65,53 @@ class _AuthFormState extends State<AuthForm> {
     widget.loginFn(_authData['email']!, _authData['password']!);
   }
 
+  Future<void> _selectPicture() async {
+    final picker = ImagePicker();
+    XFile? pickedXFile;
+
+    pickedXFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 600,
+    );
+
+    if (pickedXFile == null) {
+      return;
+    }
+
+    final imageFile = File(pickedXFile.path);
+
+    setState(() {
+      _storedImage = imageFile;
+    });
+
+    _authData['picturePath'] = path.basename(imageFile.path);
+  }
+
+  void _tryRegister() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    if (_storedImage == null) {
+      return;
+    }
+    _formKey.currentState!.save();
+    setState(() {
+      _authMode = AuthMode.login;
+    });
+    widget.registerFn(
+        _authData['firstName']!,
+        _authData['lastName']!,
+        _authData['location']!,
+        _authData['occupation']!,
+        _storedImage as File,
+        _authData['picturePath']!,
+        _authData['email']!,
+        _authData['password']!);
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
-    File? _pickedImage;
-    void _selectImage(File pickedImage) {
-      _pickedImage = pickedImage;
-    }
 
     return Column(
       children: [
@@ -176,7 +221,42 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     if (_authMode == AuthMode.signup)
                       Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                    if (_authMode == AuthMode.signup) ImageInput(_selectImage),
+                    if (_authMode == AuthMode.signup)
+                      Row(
+                        children: [
+                          Container(
+                            width: 150,
+                            height: 150,
+                            decoration:
+                                BoxDecoration(border: Border.all(width: 1), color: Colors.grey),
+                            alignment: Alignment.center,
+                            child: _storedImage != null
+                                ? Image.file(_storedImage as File,
+                                    fit: BoxFit.cover, width: double.infinity)
+                                : const Text('No Image Taken', textAlign: TextAlign.center),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 5, 0, 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextButton.icon(
+                                    onPressed: () => {},
+                                    icon: Icon(Icons.camera),
+                                    label: Text('Take Picture'),
+                                  ),
+                                  TextButton.icon(
+                                    onPressed: _selectPicture,
+                                    icon: Icon(Icons.photo_size_select_actual_rounded),
+                                    label: Text('Choose'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'E-Mail',
@@ -216,7 +296,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                     ElevatedButton(
-                      onPressed: _tryLogin,
+                      onPressed: _authMode == AuthMode.login ? _tryLogin : _tryRegister,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),

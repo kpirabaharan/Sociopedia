@@ -34,6 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _goBack(BuildContext ctx) {
+    Provider.of<UserProfile>(context, listen: false).nullUser();
     Provider.of<Posts>(ctx, listen: false)
         .fetchPosts(userId: '')
         .then((_) => Navigator.of(ctx).pop());

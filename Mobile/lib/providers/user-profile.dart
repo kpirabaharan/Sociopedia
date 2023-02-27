@@ -50,4 +50,8 @@ class UserProfile with ChangeNotifier {
       rethrow;
     }
   }
+
+  void nullUser() {
+    _user == null;
+  }
 }
