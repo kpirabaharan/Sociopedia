@@ -43,11 +43,13 @@ class _FeedState extends State<Feed> {
             return Center(child: Text('An Error Occured!'));
           } else {
             return Consumer<Posts>(
-                builder: (ctx, postData, child) => ListView(
-                      children: postData.posts
-                          .map((post) => PostItem(post: post, key: ValueKey(post.id)))
-                          .toList(),
-                    ));
+              builder: (ctx, postData, child) => ListView(
+                padding: EdgeInsets.zero,
+                children: postData.posts
+                    .map((post) => PostItem(post: post, key: ValueKey(post.id)))
+                    .toList(),
+              ),
+            );
           }
         }
       }),

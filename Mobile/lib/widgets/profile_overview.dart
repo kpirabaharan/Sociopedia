@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_frontend/widgets/display_friends.dart';
 
 import '../providers/user.dart';
 
-class ProfileOverview extends StatelessWidget {
+class ProfileOverview extends StatefulWidget {
   final User user;
   const ProfileOverview({required this.user, super.key});
+
+  @override
+  State<ProfileOverview> createState() => _ProfileOverviewState();
+}
+
+class _ProfileOverviewState extends State<ProfileOverview> {
+  bool isShowFriends = false;
 
   Widget userStat(BuildContext ctx, String statTitle, int statNum) {
     return Column(
@@ -25,6 +33,12 @@ class ProfileOverview extends StatelessWidget {
     );
   }
 
+  void _toggleFriends() {
+    setState(() {
+      isShowFriends = !isShowFriends;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -33,13 +47,13 @@ class ProfileOverview extends StatelessWidget {
           CircleAvatar(
             radius: 60.0,
             backgroundImage: NetworkImage(
-              'http://localhost:8080/assets/${user.picturePath}',
+              'http://localhost:8080/assets/${widget.user.picturePath}',
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: Text(
-              '${user.firstName} ${user.lastName}',
+              '${widget.user.firstName} ${widget.user.lastName}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -49,7 +63,7 @@ class ProfileOverview extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  user.occupation,
+                  widget.user.occupation,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 VerticalDivider(
@@ -57,7 +71,7 @@ class ProfileOverview extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  user.location,
+                  widget.user.location,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ],
@@ -73,16 +87,28 @@ class ProfileOverview extends StatelessWidget {
                 height: 100,
                 width: double.infinity,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    userStat(context, 'Friends', user.friends.length),
-                    userStat(context, 'Profile Views', user.viewedProfile),
-                    userStat(context, 'Impressions', user.impressions),
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: _toggleFriends,
+                        child: userStat(context, 'Friends', widget.user.friends.length),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: userStat(context, 'Profile Views', widget.user.viewedProfile),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: userStat(context, 'Impressions', widget.user.impressions),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+          isShowFriends ? DisplayFriends(friends: widget.user.friends) : SizedBox.shrink()
         ],
       ),
     );
