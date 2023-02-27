@@ -52,6 +52,7 @@ class _NewPostState extends State<NewPost> {
     final userId = Provider.of<Auth>(context, listen: false).userId;
     await Provider.of<Posts>(context, listen: false)
         .createPost(userId!, description, _storedImage, fileName);
+    Navigator.of(context).pop();
   }
 
   @override

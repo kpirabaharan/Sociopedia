@@ -10,7 +10,7 @@ import '../screens/profile_page_screen.dart';
 class PostItem extends StatefulWidget {
   final Post post;
 
-  PostItem(this.post);
+  const PostItem({required this.post, required Key key}) : super(key: key);
 
   @override
   State<PostItem> createState() => _PostItemState();
