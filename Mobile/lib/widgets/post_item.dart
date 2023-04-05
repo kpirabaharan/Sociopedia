@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_frontend/providers/user.dart';
-import 'package:social_media_frontend/widgets/friend.dart';
 
 import '../providers/post.dart';
 import '../providers/auth.dart';
+import '../widgets/friend.dart';
 import '../screens/profile_page_screen.dart';
 
 class PostItem extends StatefulWidget {
@@ -154,26 +153,25 @@ class _PostItemState extends State<PostItem> {
             ],
           ),
         ),
-      if (_isComments)
-        if (widget.post.comments!.length > 0)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Container(
-              height: (30 * widget.post.comments!.length).toDouble() > 60
-                  ? 90
-                  : (30 * widget.post.comments!.length).toDouble(),
-              child: ListView.builder(
-                itemBuilder: (context, index) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.post.comments![index]),
-                    Divider(),
-                  ],
-                ),
-                itemCount: widget.post.comments!.length,
-              ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+          constraints: BoxConstraints(minHeight: _isComments == false ? 0 : 90),
+          height: _isComments == false ? 0 : 90,
+          child: ListView.builder(
+            itemBuilder: (context, index) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.post.comments![index]),
+                Divider(),
+              ],
             ),
+            itemCount: widget.post.comments!.length,
           ),
+        ),
+      ),
       Divider(
         thickness: 2,
       ),
