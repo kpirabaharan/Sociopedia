@@ -1,4 +1,4 @@
-# Social Media Full-Stack Application
+# Sociopedia (Full Stack Social Media App)
 
 This is a full-stack social media application that includes both a web and mobile version. It allows users to connect and share content with others. The application provides features such as user registration, authentication, posting, commenting, liking, and following other users. The technologies used for each version are as follows:
 
@@ -37,7 +37,7 @@ This is a full-stack social media application that includes both a web and mobil
 
 To set up the application:
 
-1. Clone the repository: `git clone https://github.com/your-username/social-media-app.git`
+1. Clone the repository: `git clone https://github.com/kpirabaharan/Sociopedia.git`
 2. Set up the web application:
    - Navigate to the web application directory: `cd social-media-app/web`
    - Install the dependencies: `npm install`
